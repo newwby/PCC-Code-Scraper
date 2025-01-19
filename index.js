@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const PORT = 4000;
 
+// handling for legacy
+app.get('/home', (req, res) => {
+  res.redirect('/?' + new URLSearchParams(req.query).toString());
+});
+
 app.get('/', (req, res) => {
   const postcode = req.query.postcode
   if (postcode) {
