@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = 4000;
 
-app.get('/home', (req, res) => {
+app.get('/', (req, res) => {
   const postcode = req.query.postcode
   if (postcode) {
     res.status(200).send(`Welcome, your app is working well, thanks for querying ${postcode} but I don't know what to do with that yet.`);
