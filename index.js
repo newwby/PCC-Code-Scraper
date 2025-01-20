@@ -2,16 +2,20 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// pre-flight
-app.options('*', (req, res) => {
+// Enable CORS globally
+app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.status(200).send('');
+  // Handle pre-flight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).send('');
+  }
+  next();
 });
 
-// standard behaviour
+// Handle GET request
 app.get('/', (req, res) => {
   const postcode = req.query.postcode;
   if (postcode) {
@@ -19,15 +23,6 @@ app.get('/', (req, res) => {
   } else {
     res.status(400).send('Welcome, your app is working well, but you forgot to include a postcode.');
   }
-});
-
-// Set CORS headers for GET requests as well
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
 });
 
 app.listen(PORT, () => {
