@@ -8,7 +8,7 @@ app.get('/', async (req, res) => {
   const postcode = req.query.postcode
   if (postcode) {
     res.status(200).send(`Thanks for querying ${postcode}, ON THE DEV BRANCH!!, but I don't know what to do with that yet.`);
-    console.log(`attempting to call scraper`)
+    console.log(`attempting to call scraper with new config`)
     // call with debug mode
     const pcc_code_output = await scraper.get_code(postcode, true)
     console.log(`output for scraper is: ${pcc_code_output}`)
