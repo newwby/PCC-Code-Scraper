@@ -33,10 +33,9 @@ module.exports = {
         })});
 
         // debugging
-        for (row in rows) {
-          console.log(`data output is ${row}`)
-        }
-        console.log(`total data output is ${rows}`);
+        rows.forEach((row, index) => {
+          console.log(`Row ${index}: ${JSON.stringify(row, null, 2)}`);
+        });
 
         // close & output
         await browser.close();
