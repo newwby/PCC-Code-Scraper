@@ -30,18 +30,17 @@ module.exports = {
             console.log(`${row_code} is valid!`)
             }
 
-
-          // id
-          // .MuiDataGrid-cellContent
+            // Tidy up commenting please
 
           // roleName is the output from the map, objects returned contain the roleName
           // .trim rstrip/lstrip whitespace
           // ? ternary is to check if is truthy (i.e. exists), and : '' is to assign empty string if it doesn't
-          const trimmed_row_code = row_code ? row_code.innerText.trim() : '';
-          const trimmed_row_role = row_role ? row_role.innerText.trim() : '';
-          
+          const code = row_code ? row_code.innerText.trim() : '';
+          const role = row_role ? row_role.innerText.trim() : '';
+          const is_pcc = role == "PRESCRIBING COST CENTRE" ? true : false;
+
           return {
-            trimmed_row_code, trimmed_row_role
+            code, role, is_pcc
           };
         })});
 
