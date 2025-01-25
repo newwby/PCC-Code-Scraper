@@ -22,7 +22,12 @@ module.exports = {
         return rows.map((row) => {
           // current css selector is the toggle/dropdown (where attribute of data-field matches '__detail_panel_toggle__' which I think is incorrect so needs investigating)
           // roleCell is the first cell in the row to match
-          const roleCell = row.querySelector('[data-field="__detail_panel_toggle__"]');
+          
+          const roleCell = row.querySelector('[data-field="primaryRoleName"]');
+          
+          // id
+          // .MuiDataGrid-cellContent
+
           // roleName is the output from the map, objects returned contain the roleName
           // .trim rstrip/lstrip whitespace
           // ? ternary is to check if roleCell is truthy (i.e. exists), and : '' is to assign empty string if it doesn't
