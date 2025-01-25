@@ -8,7 +8,7 @@ module.exports = {
       
       // default postcode for initial testing
       if (debug_mode) {
-        postcode = "LN2 5HR"
+        postcode = "NR5 0GB"
       }
       
       const browser = await puppeteer.launch({headless: false});
@@ -21,19 +21,27 @@ module.exports = {
       const rows = await headless_page.$$eval('.MuiDataGrid-row', (rows) => {
         return rows.map((row) => {
           // current css selector is the toggle/dropdown (where attribute of data-field matches '__detail_panel_toggle__' which I think is incorrect so needs investigating)
-          // roleCell is the first cell in the row to match
+          // row_role is the first cell in the row to match
           
-          const roleCell = row.querySelector('[data-field="primaryRoleName"]');
+          const row_role = row.querySelector('[data-field="primaryRoleName"]');
+          const row_code = row.querySelector('[data-field="id"]');  
           
+          if (row_role == "PRESCRIBING COST CENTRE") {
+            console.log(`${row_code} is valid!`)
+            }
+
+
           // id
           // .MuiDataGrid-cellContent
 
           // roleName is the output from the map, objects returned contain the roleName
           // .trim rstrip/lstrip whitespace
-          // ? ternary is to check if roleCell is truthy (i.e. exists), and : '' is to assign empty string if it doesn't
-          const roleName = roleCell ? roleCell.innerText.trim() : '';
+          // ? ternary is to check if is truthy (i.e. exists), and : '' is to assign empty string if it doesn't
+          const trimmed_row_code = row_code ? row_code.innerText.trim() : '';
+          const trimmed_row_role = row_role ? row_role.innerText.trim() : '';
+          
           return {
-            roleName
+            trimmed_row_code, trimmed_row_role
           };
         })});
 
