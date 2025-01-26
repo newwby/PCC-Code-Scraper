@@ -5,11 +5,11 @@ const scraper = require('./scraper_puppeteer.js');
 const parser = require('./parser.js');
 
 // handling for legacy
-app.get('/home', (req, res) => {
+app.get('/home', async (req, res) => {
   res.redirect('/?' + new URLSearchParams(req.query).toString());
 });
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   const postcode = req.query.postcode
   if (postcode) {
     // console.log(`attempting to call scraper with new config`)
