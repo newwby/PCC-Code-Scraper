@@ -4,7 +4,12 @@ const PORT = 4000;
 const scraper = require('./scraper_puppeteer.js');
 const parser = require('./parser.js');
 
-app.get('/', async (req, res) => {
+// handling for legacy
+app.get('/home', (req, res) => {
+  res.redirect('/?' + new URLSearchParams(req.query).toString());
+});
+
+app.get('/', (req, res) => {
   const postcode = req.query.postcode
   if (postcode) {
     // console.log(`attempting to call scraper with new config`)
