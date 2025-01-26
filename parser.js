@@ -14,13 +14,13 @@ module.exports = {
                         valid_output += ", "
                     }
                     let new_code = module.exports.get_code(entry)
-                    console.log(`adding ${new_code}`)
+                    // console.log(`adding ${new_code}`)
                     valid_output += `${new_code}`
                 } else {
-                    console.log(`${module.exports.get_code(entry)} is not pcc`)
+                    // console.log(`${module.exports.get_code(entry)} is not pcc`)
                 }
             } else {
-                console.log(`${entry} passed to parseScraperOutput is invalid string`)
+                // console.log(`${entry} passed to parseScraperOutput is invalid string`)
             }
         });
         return valid_output
@@ -39,18 +39,18 @@ module.exports = {
                     const output = json_obj["is_pcc"]
                     // is json converting to bool?
                     // if (typeof output === "boolean") {
-                    console.log(`output for ${json_obj}["is_pcc"] == ${output}`)
+                    // console.log(`output for ${json_obj}["is_pcc"] == ${output}`)
                     if (output == true) {
                         return output
                     // is_pcc is boolean
                     } else {
-                        console.log(`invalid output is ${output}`)
+                        // console.log(`invalid output is ${output}`)
                         return false
                         }
                 // is_pcc in JSON
                 } else {return false}
             
-            console.log("code shouldn't have gotten here in is_pcc")
+            // console.log("code shouldn't have gotten here in is_pcc")
             return false
 
             // verify JSON object successfully parsed closed
@@ -78,7 +78,7 @@ module.exports = {
                 // code in JSON
                 } else {return ""}
             
-            console.log("code shouldn't have gotten here in get_code")
+            // console.log("code shouldn't have gotten here in get_code")
             return ""
 
         // try/catch close
