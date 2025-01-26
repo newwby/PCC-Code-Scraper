@@ -17,7 +17,8 @@ module.exports = {
       const headless_page = await browser.newPage();
 
       // is waiting for zero connections going to cause timeout issues? exceeds 30000ms on testing on a non-GP postcode 
-      await headless_page.goto(url, { waitUntil: 'networkidle0' });
+      // 26-01-25, updated to 2 connection idle wait for balance between responsiveness and functionality
+      await headless_page.goto(url, { waitUntil: 'networkidle2' });
       // error handling needs sorting - this will cause a crash if an invalid postcode is given because the css selector never appears
       await headless_page.waitForSelector('.MuiDataGrid-row');
       
