@@ -8,17 +8,22 @@ module.exports = {
         valid_output = ""
         scraperOutput.forEach(entry => {
             if (typeof entry == "string") {
-                if (is_pcc(entry)) {
+                if (module.exports.is_pcc(entry) == true) {
                     // handle multiple codes
                     if (valid_output != "") {
                         valid_output += ", "
                     }
-                    valid_output += `${get_code(entry)}`
+                    let new_code = module.exports.get_code(entry)
+                    console.log(`adding ${new_code}`)
+                    valid_output += `${new_code}`
+                } else {
+                    console.log(`${module.exports.get_code(entry)} is not pcc`)
                 }
             } else {
                 console.log(`${entry} passed to parseScraperOutput is invalid string`)
             }
         });
+        return valid_output
 
     // function close
     },
@@ -26,6 +31,7 @@ module.exports = {
     is_pcc: (json_string = "") => {
 
         try {
+            // debugger
             // parse
             const json_obj = JSON.parse(json_string)
             if (typeof json_obj === "object" && json_obj !== null && !Array.isArray(json_obj)) {
@@ -34,10 +40,13 @@ module.exports = {
                     // is json converting to bool?
                     // if (typeof output === "boolean") {
                     console.log(`output for ${json_obj}["is_pcc"] == ${output}`)
-                    if (output === "true") {
+                    if (output == true) {
                         return output
                     // is_pcc is boolean
-                    } else {return false}
+                    } else {
+                        console.log(`invalid output is ${output}`)
+                        return false
+                        }
                 // is_pcc in JSON
                 } else {return false}
             
@@ -72,8 +81,6 @@ module.exports = {
             console.log("code shouldn't have gotten here in get_code")
             return ""
 
-            // verify JSON object successfully parsed closed
-            } else {return ""}
         // try/catch close
         } catch {
             return ""
