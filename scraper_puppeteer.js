@@ -1,39 +1,37 @@
 // const { debug } = require('puppeteer');
 const puppeteer = require('puppeteer');
 
+// TODO - add error catching
+
 module.exports = {
   get_code: async (postcode, debug_mode = false) => {
     try {
       const url = `https://www.odsdatasearchandexport.nhs.uk/?search=generalorg&query=${encodeURIComponent(postcode)}`;
       
-      // default postcode for initial testing
+      // default postcode for initial testing, only used if called with true on second arg
       if (debug_mode) {
-        postcode = "NR5 0GB"
+        postcode = "NR5 0GB" //"LN2 5HR"
       }
       
-      const browser = await puppeteer.launch({headless: false});
+      const browser = await puppeteer.launch({headless: true});
       const headless_page = await browser.newPage();
 
+      // is waiting for zero connections going to cause timeout issues? exceeds 30000ms on testing on a non-GP postcode 
       await headless_page.goto(url, { waitUntil: 'networkidle0' });
+      // error handling needs sorting - this will cause a crash if an invalid postcode is given because the css selector never appears
       await headless_page.waitForSelector('.MuiDataGrid-row');
       
       // Find records in the dynamic table to pass to mapping func, the result of which is then assigned to the const row
+      // MuiDataGrid == Material-UI DataGrid
+      // $$Eval runs through all the rows, and then .map runs the function on each row
       const rows = await headless_page.$$eval('.MuiDataGrid-row', (rows) => {
         return rows.map((row) => {
-          // current css selector is the toggle/dropdown (where attribute of data-field matches '__detail_panel_toggle__' which I think is incorrect so needs investigating)
-          // row_role is the first cell in the row to match
-          
+          // row_role is the cell within the 'Primary Role Name' (css id 'primaryRoleName') field
+          // row_code is the cell within the 'Code' (css id 'id') field
           const row_role = row.querySelector('[data-field="primaryRoleName"]');
           const row_code = row.querySelector('[data-field="id"]');  
           
-          if (row_role == "PRESCRIBING COST CENTRE") {
-            console.log(`${row_code} is valid!`)
-            }
-
-            // Tidy up commenting please
-
-          // roleName is the output from the map, objects returned contain the roleName
-          // .trim rstrip/lstrip whitespace
+          // .trim is for rstrip/lstrip whitespace
           // ? ternary is to check if is truthy (i.e. exists), and : '' is to assign empty string if it doesn't
           const code = row_code ? row_code.innerText.trim() : '';
           const role = row_role ? row_role.innerText.trim() : '';
@@ -44,18 +42,20 @@ module.exports = {
           };
         })});
 
-        // debugging
-        rows.forEach((row, index) => {
-          console.log(`Row ${index}: ${JSON.stringify(row, null, 2)}`);
+        // prep output
+        let output = []
+        rows.forEach((row) => {
+          output.push(JSON.stringify(row, null, 2))
         });
 
         // close & output
         await browser.close();
-        return "test successful"
+        return output
     
     // try/catch change
   } catch(error) {
     console.error('Error fetching data:', error.message);
+    // don't throw error, return nil JSON or error code?
     throw new Error('Failed to fetch data for the given postcode.');
   }
 
@@ -63,41 +63,3 @@ module.exports = {
   }
   // module.epxort close
 }
-
-      
-      /*
-      // open the page, then wait until things stop loading
-      // await headless_page.goto(url, { waitUntil: 'load' });
-      await headless_page.goto(url, { waitUntil: 'networkidle0' });
-      
-      // Lookup for the selector
-      try {
-        await headless_page.waitForSelector(selector, { timeout: 5000 })
-        // ...
-      } catch (error) {
-        console.log("The element didn't appear.")
-      }
-        */
-
-      /*
-      //testing
-      console.log("about to call")
-      // debugger
-      await headless_page.goto('https://brightdata.com/blog');
-      const data = await headless_page.evaluate( () => {
-        console.log("called")
-        let data = [];
-        const titles = document.querySelectorAll('.brd_post_entry');
-      
-        for (const title of titles) {
-          const titleText = title.querySelector('.brd_post_title').textContent;
-          const titleLink = title.href;
-      
-          const article = { title: titleText, link: titleLink };
-          data.push(article);
-        }
-        return data;
-      
-      })
-        */
-        
