@@ -18,6 +18,7 @@ app.get('/', async (req, res) => {
   } else {
     res.status(400).send('Welcome, your app is working well, but you forgot to include a postcode.');
   }
+  
 });
 
 app.listen(PORT, () => {
