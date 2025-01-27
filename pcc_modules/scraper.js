@@ -21,7 +21,11 @@ module.exports = {
         process.exit(1);
       }
       
-      const browser = await puppeteer.launch({headless: true});
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        ignoreHTTPSErrors: true,
+      });
       const headless_page = await browser.newPage();
 
       // is waiting for zero connections going to cause timeout issues? exceeds 30000ms on testing on a non-GP postcode 
