@@ -3,6 +3,15 @@ const app = express();
 const PORT = 4000;
 const scraper = require('./pcc_modules/scraper.js');
 const parser = require('./pcc_modules/parser.js');
+const cors = require('cors');
+
+app.use(cors());
+
+/*
+app.use(cors({
+  origin: 'https://github.com/newwby/newwby.github.io'
+  // }));
+  */
 
 // handling for legacy
 app.get('/home', async (req, res) => {
