@@ -12,6 +12,14 @@ module.exports = {
       if (debug_mode) {
         postcode = "NR5 0GB" //"LN2 5HR"
       }
+
+      try {
+        const executablePath = puppeteer.executablePath();
+        console.log(`Chromium executable found at: ${executablePath}`);
+      } catch (error) {
+        console.error('Chromium executable not found:', error.message);
+        process.exit(1);
+      }
       
       const browser = await puppeteer.launch({headless: true});
       const headless_page = await browser.newPage();
