@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const PORT = 4000;
-const scraper = require('./scraper_puppeteer.js');
-const parser = require('./parser.js');
+const scraper = require('./pcc_modules/scraper.js');
+const parser = require('./pcc_modules/parser.js');
 
 // handling for legacy
 app.get('/home', async (req, res) => {
